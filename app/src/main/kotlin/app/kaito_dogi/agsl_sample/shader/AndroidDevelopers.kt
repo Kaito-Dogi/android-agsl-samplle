@@ -21,7 +21,7 @@ val colorShader = RuntimeShader(COLOR_SHADER_SRC)
 val shaderBrush = ShaderBrush(shader = colorShader)
 
 @Composable
-internal fun Sample(
+internal fun AndroidDevelopers(
   modifier: Modifier = Modifier,
 ) {
   Canvas(
