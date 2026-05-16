@@ -1,4 +1,6 @@
-package app.kaito_dogi.agsl_sample
+// https://developer.android.com/develop/ui/views/graphics/agsl/using-agsl#using_runtimeshader_with_jetpack_compose
+
+package app.kaito_dogi.agsl_sample.shader
 
 import android.graphics.RuntimeShader
 import androidx.compose.foundation.Canvas
