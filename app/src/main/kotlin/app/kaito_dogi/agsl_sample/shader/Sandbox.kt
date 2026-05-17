@@ -14,49 +14,50 @@ import androidx.compose.ui.graphics.ShaderBrush
 import kotlinx.coroutines.android.awaitFrame
 
 private const val COLOR_SHADER_SRC = """
-uniform float iTime;
-uniform float2 iResolution;
+  uniform float iTime;
+  uniform float2 iResolution;
 
-half4 main(float2 fragCoord) {
-  float2 p = (fragCoord * 2.0 - iResolution) / min(iResolution.x, iResolution.y);
-  float l = 0.1 / length(p) * (1.0 + sin(iTime * 2.0)) / 2.0;
-  return half4(half3(l), 1.0);
-}
+  half4 main(float2 fragCoord) {
+    float2 p = (fragCoord * 2.0 - iResolution) / min(iResolution.x, iResolution.y);
+    float l = 0.1 * (sin(iTime * 2.0) + 1.0) / 2 / length(p);
+    return half4(half3(l), 1.0);
+  }
 """
+
+private val colorShader = RuntimeShader(COLOR_SHADER_SRC)
+private val shaderBrush = ShaderBrush(shader = colorShader)
+private const val NANO_PER_SECOND = 1_000_000_000f
 
 @Composable
 internal fun Sandbox(
   modifier: Modifier = Modifier,
 ) {
-  val shader = remember { RuntimeShader(COLOR_SHADER_SRC) }
-  val brush = remember(key1 = shader) { ShaderBrush(shader) }
-
   val time = remember { mutableFloatStateOf(value = 0f) }
 
   LaunchedEffect(key1 = Unit) {
     val start = awaitFrame()
     while (true) {
       val frame = awaitFrame()
-      time.floatValue = (frame - start) / 1_000_000_000f
+      time.floatValue = (frame - start) / NANO_PER_SECOND
     }
   }
 
   Canvas(
     modifier = modifier.fillMaxSize(),
   ) {
-    shader.setFloatUniform(
+    colorShader.setFloatUniform(
       "iResolution",
       size.width,
       size.height,
     )
 
-    shader.setFloatUniform(
+    colorShader.setFloatUniform(
       "iTime",
       time.floatValue,
     )
 
     drawRect(
-      brush = brush,
+      brush = shaderBrush,
       size = size,
     )
   }

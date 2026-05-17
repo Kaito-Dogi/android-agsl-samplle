@@ -9,16 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ShaderBrush
 
-private const val COLOR_SHADER_SRC =
-  """uniform float2 iResolution;
-   half4 main(float2 fragCoord) {
-   float2 scaled = fragCoord/iResolution.xy;
-   return half4(scaled, 0, 1);
-}"""
+private const val COLOR_SHADER_SRC = """
+  uniform float2 iResolution;
+  half4 main(float2 fragCoord) {
+    float2 scaled = fragCoord/iResolution.xy;
+    return half4(scaled, 0, 1);
+  }
+"""
 
 // created as top level constants
-val colorShader = RuntimeShader(COLOR_SHADER_SRC)
-val shaderBrush = ShaderBrush(shader = colorShader)
+private val colorShader = RuntimeShader(COLOR_SHADER_SRC)
+private val shaderBrush = ShaderBrush(shader = colorShader)
 
 @Composable
 internal fun AndroidDevelopers(
